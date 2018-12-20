@@ -1,20 +1,5 @@
-// var survey = require("../data/friend")
-var survey = [{
-    name: "Ahmed",
-    photo: "https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/6/005/064/1bd/3435aa3.jpg",
-    scores: [
-        5,
-        1,
-        4,
-        4,
-        5,
-        1,
-        2,
-        5,
-        4,
-        1
-    ]
-}];
+var survey = require("../data/friend");
+
 
 module.exports = function (app) {
     var app = app;
@@ -29,9 +14,33 @@ module.exports = function (app) {
 
         survey.push(newSurvey);
 
-        res.json(newSurvey);
+        var template = survey[survey.length - 1].scores;
+        var diffArr = [];
 
+        for (var j = 0; j < survey.length -1; j++) {
+            diffArr[j] = 0;
+            var Arr = [];
+            for (var i = 0; i < template.length; i++) {
+                var diff = Math.abs(template[i] - survey[j].scores[i]);
+                Arr.push(diff);
+            }
+            for(var k = 0; k < Arr.length; k++) {
+                diffArr[j] += Arr[k];
+            };
+        };
+
+        var min = Math.min(...diffArr);
+        var lowest;
+
+        for (var l = 0; l < diffArr.length; l++) {
+            if (min == diffArr[l]) {
+                lowest = l;
+            };
+        };
+
+        res.json(survey[lowest]);
         
+
     });
-}
+};
 
